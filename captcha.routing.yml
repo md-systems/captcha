@@ -6,6 +6,22 @@ captcha_settings:
   requirements:
     _permission: 'administer CAPTCHA settings'
 
+captcha_settings_captcha:
+  path: '/admin/config/people/captcha/captcha'
+  defaults:
+    _form: '\Drupal\captcha\Form\CaptchaSettingsForm'
+    _title: 'CAPTCHA'
+  requirements:
+    _permission: 'administer CAPTCHA settings'
+
+captcha_settings_general:
+  path: '/admin/config/people/captcha/captcha/settings'
+  defaults:
+    _form: '\Drupal\captcha\Form\CaptchaSettingsForm'
+    _title: 'General settings'
+  requirements:
+    _permission: 'administer CAPTCHA settings'
+
 captcha_examples:
   path: '/admin/config/people/captcha/examples/{module}/{challenge}'
   defaults:
