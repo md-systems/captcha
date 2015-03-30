@@ -7,13 +7,17 @@ php:
 # https://www.drupal.org/node/2332295
 #  - 5.6
 
+branches:
+  except:
+    - 7.x-1.x
+
 env:
   global:
     - MODULE_NAME='captcha'
     - MODULE_TEST_GROUP='captcha'
     - DRUPAL_REPO='git://drupalcode.org/project/drupal.git'
     - DRUPAL_VERSION='8.0.x'
-    - PHPCS_VERSION='2.0.*@dev'
+    - PHPCS_VERSION='dev-master'
     - CODER_VERSION='dev-8.x-2.x'
 
 mysql:

@@ -19,17 +19,6 @@ namespace Drupal\captcha\Tests;
 class CaptchaSessionReuseAttackTestCase extends CaptchaBaseWebTestCase {
 
   /**
-   * {@inheritdoc}
-   */
-  public static function getInfo() {
-    return array(
-      'name' => t('CAPTCHA session reuse attack tests'),
-      'description' => t('Testing of the protection against CAPTCHA session reuse attacks.'),
-      'group' => t('CAPTCHA'),
-    );
-  }
-
-  /**
    * Assert that the CAPTCHA session ID reuse attack was detected.
    */
   protected function assertCaptchaSessionIdReuseAttackDetection() {
@@ -52,7 +41,7 @@ class CaptchaSessionReuseAttackTestCase extends CaptchaBaseWebTestCase {
     $node = $this->drupalCreateNode();
     // Set Test CAPTCHA on comment form.
     captcha_set_form_id_setting(self::COMMENT_FORM_ID, 'captcha/Math');
-    \Drupal::config('captcha.settings')->set('persistence', CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL_PER_FORM_INSTANCE)->save();
+    $this->config('captcha.settings')->set('persistence', CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL_PER_FORM_INSTANCE)->save();
 
     // Log in as normal user.
     $this->drupalLogin($this->normalUser);
@@ -92,7 +81,7 @@ class CaptchaSessionReuseAttackTestCase extends CaptchaBaseWebTestCase {
   public function testCaptchaSessionReuseAttackDetectionOnNodeForm() {
     // Set CAPTCHA on page form.
     captcha_set_form_id_setting('page_node_form', 'captcha/Math');
-    \Drupal::config('captcha.settings')->set('persistence', CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL_PER_FORM_INSTANCE)->save();
+    $this->config('captcha.settings')->set('persistence', CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL_PER_FORM_INSTANCE)->save();
 
     // Log in as normal user.
     $this->drupalLogin($this->normalUser);
@@ -134,7 +123,7 @@ class CaptchaSessionReuseAttackTestCase extends CaptchaBaseWebTestCase {
   public function testCaptchaSessionReuseAttackDetectionOnLoginForm() {
     // Set CAPTCHA on login form.
     captcha_set_form_id_setting('user_login_form', 'captcha/Math');
-    \Drupal::config('captcha.settings')->set('persistence', CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL_PER_FORM_INSTANCE)->save();
+    $this->config('captcha.settings')->set('persistence', CAPTCHA_PERSISTENCE_SKIP_ONCE_SUCCESSFUL_PER_FORM_INSTANCE)->save();
 
     // Go to log in form.
     // @TODO Bartik has two login forms because of sidebar's one on

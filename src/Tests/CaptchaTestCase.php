@@ -15,17 +15,6 @@ namespace Drupal\captcha\Tests;
 class CaptchaTestCase extends CaptchaBaseWebTestCase {
 
   /**
-   * {@inheritdoc}
-   */
-  public static function getInfo() {
-    return array(
-      'name' => t('General CAPTCHA functionality'),
-      'description' => t('Testing of the basic CAPTCHA functionality.'),
-      'group' => t('CAPTCHA'),
-    );
-  }
-
-  /**
    * Testing the protection of the user log in form.
    */
   public function testCaptchaOnLoginForm() {
@@ -110,7 +99,7 @@ class CaptchaTestCase extends CaptchaBaseWebTestCase {
    * Testing the case sensitive/insensitive validation.
    */
   public function testCaseInsensitiveValidation() {
-    $config = \Drupal::config('captcha.settings');
+    $config = $this->config('captcha.settings');
     // Set Test CAPTCHA on comment form.
     captcha_set_form_id_setting(self::COMMENT_FORM_ID, 'captcha/Test');
 

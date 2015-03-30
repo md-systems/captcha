@@ -19,8 +19,10 @@
 // TODO: refactor the 'comment_body[0][value]' stuff.
 namespace Drupal\captcha\Tests;
 
+use Drupal\comment\Plugin\Field\FieldType\CommentItemInterface;
+use Drupal\comment\Tests\CommentTestTrait;
+use Drupal\field\Entity\FieldConfig;
 use Drupal\simpletest\WebTestBase;
-use Drupal\Core\Language\Language;
 
 /**
  * Base class for CAPTCHA tests.
@@ -28,6 +30,8 @@ use Drupal\Core\Language\Language;
  * Provides common setup stuff and various helper functions.
  */
 abstract class CaptchaBaseWebTestCase extends WebTestBase {
+
+  use CommentTestTrait;
 
   // Some constants for better reuse.
   const CAPTCHA_WRONG_RESPONSE_ERROR_MESSAGE = 'The answer you entered for the CAPTCHA was not correct.';
@@ -91,11 +95,12 @@ abstract class CaptchaBaseWebTestCase extends WebTestBase {
     $this->adminUser = $this->drupalCreateUser($permissions);
 
     // Open comment for page content type.
-    $this->container->get('comment.manager')->addDefaultField('node', 'page');
+    $this->addDefaultCommentField('node', 'page');
 
-    // @TODO do we need this in Drupal8?
     // Put comments on page nodes on a separate page.
-    // variable_set('comment_form_location_page', COMMENT_FORM_SEPARATE_PAGE);
+    $comment_field = FieldConfig::loadByName('node', 'page', 'comment');
+    $comment_field->settings['form_location'] = CommentItemInterface::FORM_SEPARATE_PAGE;
+    $comment_field->save();
   }
 
   /**
@@ -146,8 +151,8 @@ abstract class CaptchaBaseWebTestCase extends WebTestBase {
    */
   protected function getCommentFormValues() {
     $edit = array(
-      'subject[0][value]' => 'comment_subject ' . $this->randomName(32),
-      'comment_body[0][value]' => 'comment_body ' . $this->randomName(256),
+      'subject[0][value]' => 'comment_subject ' . $this->randomMachineName(32),
+      'comment_body[0][value]' => 'comment_body ' . $this->randomMachineName(256),
     );
 
     return $edit;
@@ -158,8 +163,8 @@ abstract class CaptchaBaseWebTestCase extends WebTestBase {
    */
   protected function getNodeFormValues() {
     $edit = array(
-      'title[0][value]' => 'node_title ' . $this->randomName(32),
-      'body[0][value]' => 'node_body ' . $this->randomName(256),
+      'title[0][value]' => 'node_title ' . $this->randomMachineName(32),
+      'body[0][value]' => 'node_body ' . $this->randomMachineName(256),
     );
 
     return $edit;
@@ -250,16 +255,4 @@ abstract class CaptchaBaseWebTestCase extends WebTestBase {
       ));
   }
 
-  /**
-   * Helper function to generate random names.
-   */
-  protected function randomName($length = 8) {
-    $values = array_merge(range(65, 90), range(97, 122), range(48, 57));
-    $max = count($values) - 1;
-    $str = chr(mt_rand(97, 122));
-    for ($i = 1; $i < $length; $i++) {
-      $str .= chr($values[mt_rand(0, $max)]);
-    }
-    return $str;
-  }
 }
